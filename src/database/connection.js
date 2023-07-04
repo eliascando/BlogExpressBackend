@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const {env} = require('../config')
+
 
 const connection = async () => {
     try{
-        await mongoose.connect("mongodb://127.0.0.1:27017/mi_blog");
+        await mongoose.connect(env.MONGODB_URL);
         console.log('Base de datos conectada');
 
     }catch(error){

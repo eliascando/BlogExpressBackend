@@ -1,6 +1,8 @@
 const { connection } = require('./database/connection');
 const express = require('express');
 const cors = require('cors');
+const {env} = require('../src/config')
+const PORT = env.PORT;
 
 //Iniciar la app
 console.log("Inicio de la aplicación")
@@ -15,9 +17,6 @@ const app = express();
 app.use(cors());
 app.use(express.json()); //recibir datos con content-type: application/json
 app.use(express.urlencoded({ extended: true })); //recibir datos con content-type: application/x-www-form-urlencoded
-
-//Definir el puerto
-const PORT = 5000;
 
 //Rutas 
 const rutas_articulos = require('./routes/articulo');

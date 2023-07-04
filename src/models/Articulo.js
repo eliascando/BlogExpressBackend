@@ -5,6 +5,10 @@ const ArticuloSchema = Schema({
         type: String,
         required: true
     },
+    resumen: {
+        type: String,
+        required: true
+    },
     contenido:{
         type: String,
         required: true
