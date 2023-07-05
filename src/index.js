@@ -1,35 +1,38 @@
 const { connection } = require('./database/connection');
 const express = require('express');
 const cors = require('cors');
-const {env} = require('../src/config')
+const { env } = require('../src/config');
+const { verificarClaveAPI } = require('../src/middlewares/apiKeyConfig');
 const PORT = env.PORT;
 
-//Iniciar la app
-console.log("Inicio de la aplicación")
-
-//Conectar a la base de datos
+// Conectar a la base de datos
 connection();
 
-//Crear servidor de node
+// Crear servidor de node
 const app = express();
 
-//Configurar el servidor
+// Configurar el servidor
 app.use(cors());
-app.use(express.json()); //recibir datos con content-type: application/json
-app.use(express.urlencoded({ extended: true })); //recibir datos con content-type: application/x-www-form-urlencoded
+app.use(express.json()); // recibir datos con content-type: application/json
+app.use(express.urlencoded({ extended: true })); // recibir datos con content-type: application/x-www-form-urlencoded
 
-//Rutas 
+// Middleware para verificar la clave de API
+
+
+// Rutas 
 const rutas_articulos = require('./routes/articulo');
 
-//Cargar las rutas
-app.use('/api', rutas_articulos);
+// Cargar las rutas después del middleware de verificación de clave de API
+app.use('/api', verificarClaveAPI, rutas_articulos);
 
-
-app.get("/",(req, res)=>{
-    res.send("<h1>Hola mundo desde el servidor de NodeJS</h1>");
+app.get("/health",(req, res)=>{
+    return res.status(200).json({
+        status: "ok",
+        mensaje: "Servidor funcionando correctamente"
+    });
 });
 
-//Iniciar el servidor
+// Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`)
+    console.log(`Servidor corriendo en el puerto ${PORT}...`);
 });
